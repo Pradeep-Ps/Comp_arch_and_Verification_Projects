@@ -1,0 +1,326 @@
+# Compile of try.sv was successful with warnings.
+vsim -voptargs=+acc work.try
+# vsim -voptargs="+acc" work.try 
+# Start time: 11:11:14 on Nov 15,2021
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Error (suppressible): C:\Users\19718\Documents\ECE\ECE585\Project\Group30MSDgit\MSDG30\Group30_MSD_Project\try.sv(81): (vopt-7063) Failed to find 'add' in hierarchical name 'add'.
+#         Region: try.f1
+# Optimization failed
+# Error loading design
+# End time: 11:11:14 on Nov 15,2021, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+# Compile of try.sv was successful with warnings.
+vsim -voptargs=+acc work.try
+# vsim -voptargs="+acc" work.try 
+# Start time: 11:11:51 on Nov 15,2021
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: C:\Users\19718\Documents\ECE\ECE585\Project\Group30MSDgit\MSDG30\Group30_MSD_Project\try.sv(83): (vopt-2697) MSB of part-select into 'address_map' is out of bounds.
+# Loading sv_std.std
+# Loading work.try(fast)
+# Loading work.file_read(fast)
+run -all
+# reading successful
+# Reading trace1 file successfully
+# 
+# push 30 2 ff @ counter=30, time=30,  op=2,  add=000000ff,
+# time_q='{30},
+#  op_q  ='{2},
+#  add_q ='{255}, size=1
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 31 2 fe @ counter=31, time=31,  op=2,  add=000000fe,
+# time_q='{30, 31},
+#  op_q  ='{2, 2},
+#  add_q ='{255, 254}, size=2
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 32 0 dd @ counter=32, time=32,  op=0,  add=000000dd,
+# time_q='{30, 31, 32},
+#  op_q  ='{2, 2, 0},
+#  add_q ='{255, 254, 221}, size=3
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=3
+# 
+# 
+# push 40 1 aa @ counter=40, time=40,  op=1,  add=000000aa,
+# time_q='{30, 31, 32, 40},
+#  op_q  ='{2, 2, 0, 1},
+#  add_q ='{255, 254, 221, 170}, size=4
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# push 50 2 ff @ counter=50, time=50,  op=2,  add=000000ff,
+# time_q='{30, 31, 32, 40, 50},
+#  op_q  ='{2, 2, 0, 1, 2},
+#  add_q ='{255, 254, 221, 170, 255}, size=5
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 61 2 fe @ counter=61, time=61,  op=2,  add=000000fe,
+# time_q='{30, 31, 32, 40, 50, 61},
+#  op_q  ='{2, 2, 0, 1, 2, 2},
+#  add_q ='{255, 254, 221, 170, 255, 254}, size=6
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 62 0 dd @ counter=62, time=62,  op=0,  add=000000dd,
+# time_q='{30, 31, 32, 40, 50, 61, 62},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221}, size=7
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=3
+# 
+# 
+# push 70 1 aa @ counter=70, time=70,  op=1,  add=000000aa,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170}, size=8
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# push 80 2 ff @ counter=80, time=80,  op=2,  add=000000ff,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255}, size=9
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 91 2 fe @ counter=91, time=91,  op=2,  add=000000fe,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80, 91},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254}, size=10
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 102 0 dd @ counter=102, time=102,  op=0,  add=000000dd,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80, 91, 102},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221}, size=11
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=3
+# 
+# 
+# push 110 1 aa @ counter=110, time=110,  op=1,  add=000000aa,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80, 91, 102, 110},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170}, size=12
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# push 130 2 ff @ counter=130, time=130,  op=2,  add=000000ff,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255}, size=13
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 131 2 fe @ counter=131, time=131,  op=2,  add=000000fe,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254}, size=14
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# push 132 0 dd @ counter=132, time=132,  op=0,  add=000000dd,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221}, size=15
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=3
+# 
+# 
+# push 140 1 aa @ counter=140, time=140,  op=1,  add=000000aa,
+# time_q='{30, 31, 32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170}, size=16
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# pop 30 2 ff @ counter=131,  time=140, op=1, add=000000aa,
+# time_q='{31, 32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140},
+# op_q  ='{2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1},
+# add_q ='{254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170}, size=15
+# 
+# push 150 2 ff @ counter=162, time=150,  op=2,  add=000000ff,
+# time_q='{31, 32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150},
+#  op_q  ='{2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2},
+#  add_q ='{254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255}, size=16
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# pop 31 2 fe @ counter=132,  time=150, op=2, add=000000ff,
+# time_q='{32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150},
+# op_q  ='{0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2},
+# add_q ='{221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255}, size=15
+# 
+# push 161 2 fe @ counter=163, time=161,  op=2,  add=000000fe,
+# time_q='{32, 40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161},
+#  op_q  ='{0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2},
+#  add_q ='{221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254}, size=16
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=7
+# 
+# 
+# pop 32 0 dd @ counter=133,  time=161, op=2, add=000000fe,
+# time_q='{40, 50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161},
+# op_q  ='{1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2},
+# add_q ='{170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254}, size=15
+# 
+# pop 40 1 aa @ counter=141,  time=172, op=0, add=000000dd,
+# time_q='{50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161},
+# op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2},
+# add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254}, size=14
+# 
+# push 172 0 dd @ counter=172, time=172,  op=0,  add=000000dd,
+# time_q='{50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221}, size=15
+# Row=0, Hcolumn=0, Bank=0, Bank group=3, L column=3
+# 
+# 
+# push 180 1 aa @ counter=180, time=180,  op=1,  add=000000aa,
+# time_q='{50, 61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180},
+#  op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1},
+#  add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170}, size=16
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# pop 50 2 ff @ counter=151,  time=180, op=1, add=000000aa,
+# time_q='{61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180},
+# op_q  ='{2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1},
+# add_q ='{254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170}, size=15
+# 
+# push 190 2 77 @ counter=190, time=190,  op=2,  add=00000077,
+# time_q='{61, 62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190},
+#  op_q  ='{2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2},
+#  add_q ='{254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119}, size=16
+# Row=0, Hcolumn=0, Bank=0, Bank group=1, L column=6
+# 
+# 
+# pop 61 2 fe @ counter=162,  time=190, op=2, add=00000077,
+# time_q='{62, 70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190},
+# op_q  ='{0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2},
+# add_q ='{221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119}, size=15
+# 
+# pop 62 0 dd @ counter=163,  time=200, op=0, add=000000ae,
+# time_q='{70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190},
+# op_q  ='{1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2},
+# add_q ='{170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119}, size=14
+# 
+# push 200 0 ae @ counter=200, time=200,  op=0,  add=000000ae,
+# time_q='{70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190, 200},
+#  op_q  ='{1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0},
+#  add_q ='{170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119, 174}, size=15
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# push 201 0 ae @ counter=201, time=201,  op=0,  add=000000ae,
+# time_q='{70, 80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190, 200, 201},
+#  op_q  ='{1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0},
+#  add_q ='{170, 255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119, 174, 174}, size=16
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# pop 70 1 aa @ counter=171,  time=201, op=0, add=000000ae,
+# time_q='{80, 91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119, 174, 174}, size=15
+# 
+# pop 80 2 ff @ counter=181,  time=400, op=1, add=000000ad,
+# time_q='{91, 102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{254, 221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119, 174, 174}, size=14
+# 
+# pop 91 2 fe @ counter=192,  time=400, op=1, add=000000ad,
+# time_q='{102, 110, 130, 131, 132, 140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{221, 170, 255, 254, 221, 170, 255, 254, 221, 170, 119, 174, 174}, size=13
+# 
+# pop 102 0 dd @ counter=203,  time=400, op=1, add=000000ad,
+# time_q='{110, 130, 131, 132, 140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{170, 255, 254, 221, 170, 255, 254, 221, 170, 119, 174, 174}, size=12
+# 
+# pop 110 1 aa @ counter=211,  time=400, op=1, add=000000ad,
+# time_q='{130, 131, 132, 140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{2, 2, 0, 1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{255, 254, 221, 170, 255, 254, 221, 170, 119, 174, 174}, size=11
+# 
+# pop 130 2 ff @ counter=231,  time=400, op=1, add=000000ad,
+# time_q='{131, 132, 140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{2, 0, 1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{254, 221, 170, 255, 254, 221, 170, 119, 174, 174}, size=10
+# 
+# pop 131 2 fe @ counter=232,  time=400, op=1, add=000000ad,
+# time_q='{132, 140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{0, 1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{221, 170, 255, 254, 221, 170, 119, 174, 174}, size=9
+# 
+# pop 132 0 dd @ counter=233,  time=400, op=1, add=000000ad,
+# time_q='{140, 150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{1, 2, 2, 0, 1, 2, 0, 0},
+# add_q ='{170, 255, 254, 221, 170, 119, 174, 174}, size=8
+# 
+# pop 140 1 aa @ counter=241,  time=400, op=1, add=000000ad,
+# time_q='{150, 161, 172, 180, 190, 200, 201},
+# op_q  ='{2, 2, 0, 1, 2, 0, 0},
+# add_q ='{255, 254, 221, 170, 119, 174, 174}, size=7
+# 
+# pop 150 2 ff @ counter=251,  time=400, op=1, add=000000ad,
+# time_q='{161, 172, 180, 190, 200, 201},
+# op_q  ='{2, 0, 1, 2, 0, 0},
+# add_q ='{254, 221, 170, 119, 174, 174}, size=6
+# 
+# pop 161 2 fe @ counter=262,  time=400, op=1, add=000000ad,
+# time_q='{172, 180, 190, 200, 201},
+# op_q  ='{0, 1, 2, 0, 0},
+# add_q ='{221, 170, 119, 174, 174}, size=5
+# 
+# pop 172 0 dd @ counter=273,  time=400, op=1, add=000000ad,
+# time_q='{180, 190, 200, 201},
+# op_q  ='{1, 2, 0, 0},
+# add_q ='{170, 119, 174, 174}, size=4
+# 
+# pop 180 1 aa @ counter=281,  time=400, op=1, add=000000ad,
+# time_q='{190, 200, 201},
+# op_q  ='{2, 0, 0},
+# add_q ='{119, 174, 174}, size=3
+# 
+# pop 190 2 77 @ counter=291,  time=400, op=1, add=000000ad,
+# time_q='{200, 201},
+# op_q  ='{0, 0},
+# add_q ='{174, 174}, size=2
+# 
+# pop 200 0 ae @ counter=301,  time=400, op=1, add=000000ad,
+# time_q='{201},
+# op_q  ='{0},
+# add_q ='{174}, size=1
+# 
+# pop 201 0 ae @ counter=302,  time=400, op=1, add=000000ad,
+# time_q='{},
+# op_q  ='{},
+# add_q ='{}, size=0
+# 
+# push 400 1 ad @ counter=400, time=400,  op=1,  add=000000ad,
+# time_q='{400},
+#  op_q  ='{1},
+#  add_q ='{173}, size=1
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=5
+# 
+# 
+# pop 400 1 ad @ counter=501,  time=600, op=2, add=00000088,
+# time_q='{},
+# op_q  ='{},
+# add_q ='{}, size=0
+# 
+# push 600 2 88 @ counter=600, time=600,  op=2,  add=00000088,
+# time_q='{600},
+#  op_q  ='{2},
+#  add_q ='{136}, size=1
+# Row=0, Hcolumn=0, Bank=0, Bank group=2, L column=1
+# 
+# 
+# pop 600 2 88 @ counter=701,  time=600, op=2, add=00000088,
+# time_q='{},
+# op_q  ='{},
+# add_q ='{}, size=0
+# ** Note: $stop    : C:/Users/19718/Documents/ECE/ECE585/Project/Group30MSDgit/MSDG30/Group30_MSD_Project/try.sv(10)
+#    Time: 2 us  Iteration: 0  Instance: /try
+# Break in Module try at C:/Users/19718/Documents/ECE/ECE585/Project/Group30MSDgit/MSDG30/Group30_MSD_Project/try.sv line 10

@@ -1,0 +1,266 @@
+// dut.sv - FILE name
+//
+//
+// DESCRIPTION:
+// Modified Ref_file serving as design document
+// to test our testbench intf.operation.
+//
+//******************************************************************
+//
+import def::*; //importing package definitions
+module EPW22_design(EPW22_if.tertiary intf);
+	// internal declarations
+	logic [xlat_size-1:0] [xlat_data_width-1:0] xlat_table; // packed array for xlat table registers **Should we initialize this to 'b0?**
+	byte unsigned xlat_pointer = 8'b0; //pointer to store the last accessed location in xlat table
+
+	logic [num_keys-1:0] [key_width-1:0] keys; // packed array for keys registers
+	logic [0:tag_width**2-1] [(data_width/tag_width**2)-1:0] delay_sched; // register with delay values ***look over packed arrays
+
+	logic [20:0] data_stream[$]; // queue for output stream with elements {result, delay}
+	logic [data_width-1:0] data_A; // temporary store data_A
+	logic [tag_width-1:0] temp_tag;
+	logic b_flag, qpop_flag = 1'b0; // flag for if B is on data line
+	logic assert_error = 1'b0;
+
+	function void clear_states(); // clear states, soft intf.reset (intf.reset instruction)
+		delay_sched = 'b0; // clear delay scheduler
+		xlat_table = '0; // clear xlat_table
+		keys = 'b0;  // clear keys registers (set to 0)
+		keys[1] = ~0; // fill register 1 with 1's
+	endfunction
+
+	task init_chip(); // initialize the chip (pin intf.reset)
+		clear_states();
+		xlat_pointer = 8'h00;  // intf.reset xlat table pointer
+		temp_tag = 'b0; // clear the temp intf.tag
+		data_stream.delete(); // clear the queue
+		`ifdef BUG
+			intf.duv_ready = 1'b1; // intf.duv_ready to receive input
+			intf.duv_error = 1'b0; // no output intf.duv_error, might need to comment this out***
+			intf.duv_valid = 1'b0; // no result provided
+		`endif
+		`ifdef KEY
+			if($time == 300) keys[0] = ~keys[0];
+			if($time == 1000) keys[1] = ~keys[1];
+		`endif
+	endtask
+
+	task display_table();
+	`ifdef PRINT
+		$display($time,,,"0 xlat[%0d] = %0h", xlat_pointer, xlat_table[xlat_pointer]);
+	`endif
+	endtask
+
+	always_ff @(posedge intf.clk)
+	begin : device_reset
+		if (intf.reset)	init_chip(); //calling task
+		else
+		begin
+			intf.duv_ready = 1'b1;
+			assert_error = 1'b0;
+		end
+	end : device_reset
+
+	always_ff @(posedge intf.clk) begin : alu_ops
+		 case (intf.op)
+			// NO OPERATION
+			'h0 : ;
+
+			// Soft reset
+			'h1 : clear_states();
+
+			// Store A in (reorder/scheduler) register (DONE IN ONE CLK)
+			'h2 : delay_sched = intf.data;
+
+			// Store A in key register B
+			'h3 : begin: op_3
+							if (b_flag)
+							begin: reset_bflag
+								if (intf.data < 2 || intf.data > 7) assert_error = 1'b1;
+								else                                keys[intf.data] = data_A;
+								b_flag = 1'b0;
+							end: reset_bflag
+							else
+								{data_A, b_flag} = {intf.data, 1'b1};
+						end: op_3
+
+			// Store A,B in next table locations
+			'h4 : begin: op_4
+							if (b_flag)
+								begin: reset_bflag
+									if (xlat_pointer > 252) assert_error = 1'b1; //size of xlat table is 256(0-255) and 4 entries are made for one intf.operation
+									else
+									begin: store_table
+										xlat_table[xlat_pointer] = data_A[15:8]; // xlat is 8 bits, data is 16bits, storing intf.operand A MSB 8bits in xlat table
+										display_table();
+										xlat_pointer++;
+										xlat_table[xlat_pointer] = data_A[7:0]; // xlat is 8 bits, data is 16bits storing intf.operand A LSB 8bits in xlat table
+										display_table();
+										`ifdef BUG
+											xlat_pointer++;
+										`endif
+										xlat_table[xlat_pointer] = intf.data[15:8]; // xlat is 8 bits, data is 16bits storing intf.operand B MSB 8bits in xlat table from data line
+										display_table();
+										xlat_pointer++;
+										xlat_table[xlat_pointer] = intf.data[7:0]; // xlat is 8 bits, data is 16bits storing intf.operand B LSB 8bits in xlat table from data line
+										display_table();
+										xlat_pointer++;
+									end: store_table
+									b_flag = 1'b0;
+								end: reset_bflag
+								else {data_A, b_flag} = {intf.data, 1'b1};
+						end: op_4
+
+			'h5 : ; // Reserved
+			'h6 : ; // Reserved
+			'h7 : ; // Reserved
+
+			// Result = RotateLeft A,B
+			'h8 : begin: op_8
+							if (b_flag)
+							begin: reset_bflag
+								data_stream.push_front({data_A << intf.data, delay_sched[temp_tag]+2'b10}); //store the data and delay in queue
+								b_flag = 1'b0;
+							end: reset_bflag
+							else {temp_tag, data_A, b_flag} = {intf.tag, intf.data, 1'b1}; //store tag in temporary tag, store data in dataA and set B flag 1
+					end: op_8
+
+			// Result = RotateRight A,B
+			'h9 : begin: op_9
+						if (b_flag)
+						begin: reset_bflag
+							data_stream.push_front({data_A >> intf.data, delay_sched[temp_tag]+2'b10}); //store the data and delay in queue
+							`ifdef BUG
+									b_flag = 1'b0;
+							`endif
+						end: reset_bflag
+						else {temp_tag, data_A, b_flag} = {intf.tag, intf.data, 1'b1}; //store tag in temporary tag, store data in dataA and set B flag 1
+					end: op_9
+
+			// Result = XOR Reg[A],B
+			'hA : begin: op_A
+						if (b_flag)
+						begin: reset_bflag
+							if (data_A > 7 || data_A < 2) assert_error = 1'b1;
+							else data_stream.push_front({keys[data_A] ^ intf.data, delay_sched[temp_tag]+2'b10}); //store the data and delay in queue
+							b_flag = 1'b0;
+						end: reset_bflag
+						else {temp_tag, data_A, b_flag} = {intf.tag, intf.data, 1'b1}; //store intf.tag in temporary intf.tag, store data in dataA and set B flag 1
+					end: op_A
+
+			// Result = Table[ Reg-hi[A] ],Table[ Reg-low[A] ] (DONE IN ONE intf.clk)
+			'hB : begin: op_B
+						if (keys[intf.data][data_width-1:data_width/2] < xlat_pointer && keys[intf.data][data_width/2-1:0] < xlat_pointer) // Keys should point to table location less than pointer address location
+							data_stream.push_front({xlat_table[keys[intf.data][data_width-1:data_width/2]], xlat_table[keys[intf.data][data_width/2-1:0]], delay_sched[intf.tag]+2'b10}); //concatenating the xlat table values and delay to store the data and delay in queue
+						else assert_error = 1'b1;
+					end: op_B
+
+			//Reg[A] = RotateLeft Reg[A], B
+			'hC : begin: op_C
+						if (b_flag)
+							begin: reset_bflag
+								if (data_A > 7 || data_A < 2) assert_error = 1'b1; //Key value should be within 0-7 and key[0] and key[1] are reserved
+								else keys[data_A] = keys[data_A] << intf.data; //rotate left the data in key[A] data times and store in key[A]
+								b_flag = 1'b0;
+							end: reset_bflag
+							else {data_A, b_flag} = {intf.data, 1'b1};
+					end: op_C
+
+			// Reg[A] = RotateRight Reg[A], B
+			'hD : begin: op_D
+						if (b_flag)
+						begin: reset_bflag
+							if (data_A > 7 || data_A < 2) assert_error= 1'b1; //Key value should be within 0-7 and key[0] and key[1] are reserved
+							else keys[data_A] = keys[data_A] >> intf.data; //rotate right the data in key[A] data times and store in key[A]
+							b_flag = 1'b0;
+						end:reset_bflag
+						else {data_A, b_flag} = {intf.data, 1'b1};
+					end: op_D
+
+			// Reg[A] = XOR Reg[A], B
+			'hE : begin: op_E
+						if (b_flag)
+						begin: reset_bflag
+							if (data_A > 7 || data_A < 2) assert_error = 1'b1; //Key value should be within 0-7 and key[0] and key[1] are reserved
+							else keys[data_A] = keys[data_A] ^ intf.data; //Xor key[A] with data
+							b_flag = 1'b0;
+						end: reset_bflag
+						else	{data_A, b_flag} = {intf.data, 1'b1};
+					end: op_E
+
+			// Reg[A] = Table[ Reg-hi[A] ], Table[ Reg-low[A] ] (DONE IN ONE intf.clk)
+			'hF : begin: op_F
+						if (intf.data > 7 || intf.data < 2)
+							if (~(keys[intf.data][data_width-1:data_width/2] < xlat_pointer && keys[intf.data][data_width/2-1:0] < xlat_pointer)) // Keys should point to table location less than pointer address location ***Ps
+								assert_error = 1'b1;
+						else keys[intf.data] = {xlat_table[keys[intf.data][data_width-1:data_width/2]], xlat_table[keys[intf.data][(data_width/2)-1:0]]};
+						end: op_F
+			default: ;
+		endcase
+	end: alu_ops
+
+	always @(posedge intf.clk)
+	begin : display_result
+		foreach(data_stream[i])
+		fork
+		begin: foreach_block
+				`ifdef PRINT
+					$display($time, " %0h, %0h", data_stream[i][(data_width + (tag_width**2)) -1:tag_width**2], data_stream[i][(tag_width**2)-1:0]);
+		    `endif
+				if (data_stream[i][(tag_width**2)-1:0]) // counter for results output delay***
+				begin
+					`ifdef PRINT
+						$display("decrement");
+			    `endif
+					data_stream[i] -= 1;
+				end
+
+				else if (intf.duv_valid) // check if a duv_ready result on the line
+				begin
+					`ifdef PRINT
+						$display("duplicate");
+					`endif
+					intf.duv_error = 1'b1; // deassert duv_valid?
+				end
+
+				if (data_stream[i][(tag_width**2)-1:0] == 0)
+				begin
+					`ifdef PRINT
+						$display("pintf.op from queue to result");
+					`endif
+					intf.duv_result = data_stream[i][(data_width + (tag_width**2)) -1:tag_width**2]; //***
+					qpop_flag = 1'b1;
+					`ifdef PRINT
+						$display("d[%d]: %p", i, data_stream);
+					`endif
+				end
+
+				`ifdef PRINT
+					$display($time, " %p, d[%d]: %0h, %0h", data_stream, i, data_stream[i][(data_width + (tag_width**2)) -1:tag_width**2], data_stream[i][(tag_width**2)-1:0]);
+				`endif
+		end: foreach_block
+
+			begin: set_duv_valid
+			 @(intf.duv_result)		   intf.duv_valid = 1'b1; //when result changes duv_valid is asserted
+			 @(posedge intf.clk) intf.duv_valid = 1'b0; //deassert after one clock pulse
+			end: set_duv_valid
+		join_any
+
+		if (qpop_flag)
+		begin
+			data_stream = data_stream.find with (item[(data_width/tag_width**2)-1:0] != 'b0); // remove pushed results from the queue***
+			qpop_flag = 1'b0;
+		end
+	end : display_result
+
+	always @(assert_error)
+	begin: assert_error_signal
+		if (assert_error)
+		begin
+			intf.duv_error = 1'b1;
+		 	@(posedge intf.clk)	intf.duv_error = 1'b0;
+		end
+		else intf.duv_error = 1'b0;
+	end:  assert_error_signal
+
+endmodule : EPW22_design

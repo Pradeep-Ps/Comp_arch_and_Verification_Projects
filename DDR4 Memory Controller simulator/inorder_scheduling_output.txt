@@ -1,0 +1,53 @@
+vlog inorder_scheduling.sv
+# QuestaSim-64 vlog 10.7c Compiler 2018.08 Aug 18 2018
+# Start time: 12:07:23 on Dec 04,2021
+# vlog -reportprogress 300 inorder_scheduling.sv 
+# -- Compiling package inorder_scheduling_sv_unit
+# -- Importing package mc_defs
+# -- Compiling module try
+# -- Compiling module file_read
+# ** Warning: inorder_scheduling.sv(118): (vlog-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(118): (vlog-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(118): (vlog-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(118): (vlog-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(125): (vlog-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# 
+# Top level modules:
+# 	try
+# End time: 12:07:23 on Dec 04,2021, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 5
+vsim work.try +Trace=Trace1.txt
+# End time: 12:07:30 on Dec 04,2021, Elapsed time: 0:00:36
+# Errors: 0, Warnings: 5
+# vsim work.try "+Trace=Trace1.txt" 
+# Start time: 12:07:30 on Dec 04,2021
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Warning: inorder_scheduling.sv(118): (vopt-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(118): (vopt-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(118): (vopt-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(118): (vopt-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# ** Warning: inorder_scheduling.sv(125): (vopt-2240) Treating stand-alone use of function 'pop_front' as an implicit VOID cast.
+# Loading sv_std.std
+# Loading work.mc_defs(fast)
+# Loading work.inorder_scheduling_sv_unit(fast)
+# Loading work.try(fast)
+run -all
+# Reading Trace1.txt file successfully
+# 31 PRE 0 2
+# 54 ACT 0 2 2046
+# 78 RD 0 2 1760
+# 107 PRE 0 2
+# 130 ACT 0 2 2046
+# 154 RD 0 2 1760
+# 231 PRE 0 2
+# 254 ACT 0 2 2046
+# 278 RD 0 2 1760
+# 307 PRE 0 2
+# 330 ACT 0 2 2046
+# 354 RD 0 2 1760
+# ** Note: $stop    : inorder_scheduling.sv(131)
+#    Time: 0 ps  Iteration: 0  Instance: /try/f1
+# Break at inorder_scheduling.sv line 131
+quit -sim
+# End time: 12:08:08 on Dec 04,2021, Elapsed time: 0:00:38
+# Errors: 0, Warnings: 5

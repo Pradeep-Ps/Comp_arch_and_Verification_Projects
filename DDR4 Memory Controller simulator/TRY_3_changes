@@ -1,0 +1,147 @@
+// try.sv - file for checkpoint 4
+//
+//collaborator :	PRADEEP GOVINDAN
+// Date:	24-NOV-2021
+//
+// Description:
+// ------------
+//COMMANDS
+// vlog +define+DEBUG try.sv - compile
+// vsim -gui work.try +Trace=trace.txt - simulate
+// run-all - run
+// quit -sim - quit simulatoin
+//
+//
+//////////////////////////////////////////////////////////////////////
+//
+timeunit 1ns; timeprecision 100ps;
+// `timescale 1ns/100ps
+module try();
+  bit clk;
+  longint unsigned counter;//counter to count cpu ticks 3.2GHz frequency processor
+    always #1 clk = ~clk; //time period 2
+    file_read f1(.clk(clk));
+endmodule
+
+module file_read(input bit clk );
+  int fd, readfile, t_n, op, address;
+  int t_q[$], op_q[$], intime_q[$], flag,pending_push, waiting_pop, j;
+  bit [31:0]add_map, add_q[$];
+  longint unsigned counter, pop_counter, gcounter=0;;
+  string file_name;
+
+  task openFile();
+    fd = $fopen(file_name, "r");
+    if(fd)         $display("reading successful");
+    else           $display("reading failed");
+  endtask
+
+  function int get_input();
+    if($fscanf(fd, "%0d %0d %H", t_n, op, address)==3)
+    begin                                           //reading the input from file and checking whether all 3 inputs are there
+      add_map = '0;
+      add_map = 32'(add_map ^ address);
+      return 1;
+    end
+    else  return 0;
+  endfunction
+
+  task parserfilename();                                //task to change input file during run time
+    if(!$value$plusargs("Trace=%s", file_name) )
+    begin                                                  //get the input file name
+      $error("NO ip file");                                  // display error if there is no input file found
+      $stop;
+    end
+  endtask
+
+task print_addq();
+  $write("add_q = {");
+  foreach(add_q[j]) $write("%0h,", add_q[j]);
+   $write("}\n");
+endtask
+
+initial
+begin: initial_begin
+      parserfilename(); //get input file name
+  	  openFile();   //check able to open file or not
+      $display("Reading %s file successfully", file_name);
+      while( t_q.size() != 0 || !$feof(fd)  || pending_push)
+      begin:loop
+        counter += 1;
+    		//$display("counter=%d",counter);
+          if(t_q.size()<16)
+          begin:size
+              if(!pending_push)
+              begin
+                  if(get_input())
+                  begin
+                      pending_push=1;
+                  end
+              end
+
+            	if(pending_push)
+              begin:[pending_push]
+            				if( t_q.size()==0 && counter < t_n)
+              					counter = t_n;
+                    if(counter >= t_n)
+                    begin:push
+                       intime_q.push_back(counter); t_q.push_back(t_n); op_q.push_back(op); add_q.push_back(add_map);
+                       pending_push = 0;
+                       `ifdef DEBUG
+                        $display("G clock %0d", gcounter);
+                        $display("in time %p", intime_q);
+                        $display("\npush %0d %0d %0h @ counter=%0d, size=%0d, time=%0d,  op=%0d,  add=%h,\nt_q   =%p,\nop_q  =%p",t_n, op, add_map, counter, t_q.size(), t_n,     op,    add_map,   t_q,    op_q);
+                        print_addq();
+                        $display("Row=%0d, Hcolumn=%0d, Bank=%0d, Bank group=%0d, L column=%0d\n", add_map[31:18],add_map[17:10],add_map[9:8],add_map[7:6],add_map[5:3]);
+                        `endif
+                     end:push
+
+                end:req_flag
+                waiting_pop =1;
+
+          end:size
+
+    			if(waiting_pop)
+          begin:start__operation
+
+      			   if((counter==100+intime_q[0]) && (t_q.size() != 0))
+               begin:pop_display
+                 `ifdef DEBUG
+                  $display("G clock %0d", gcounter);
+                  $display("\npop %0d %0d %0h @ counter=%0d, size=%0d, time=%0d, op=%0d, add=%h,\nt_q=%p,\nop_q  =%p",
+                  t_q.pop_front(), op_q.pop_front(), add_q.pop_front(), counter ,t_q.size(),t_n, op, add_map, t_q, op_q, add_q);
+                  print_addq();
+                  `endif
+                  pop_counter = 0;
+                  intime_q.pop_front();
+                end:pop_display
+              else
+                  pop_counter = pop_counter+1;
+
+          end:start__operation
+         gcounter    = gcounter + 1;
+         end:loop
+	   $fclose(fd);
+     $stop;
+end:initial_begin
+// task open_page_policy(op);
+//  case(op)
+//    0 : $display("Data read");
+//    1 : $display("Data write");
+//    2 : $display("Instruction fetch");
+//  endcase
+// endtask
+open_page POLICY(.*);
+endmodule
+// create a list to keep track of items into queue and pop at that time mentioned in queue
+
+module open_page(
+  input int t_q[$], op_q[$], intime_q[$],
+  input bit [31:0] add_q[$],
+  input longint unsigned counter);
+  initial begin
+    $display("open page policy %0d", counter);
+    $stop;
+  end
+endmodule
+//perfect file in debug mode

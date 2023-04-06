@@ -1,0 +1,8 @@
+work/
+transcript
+vsim.wlf
+Class_stimulus.sv
+        ck2.cr.mti
+        ck2.mpf
+        vsim.wlf
+        tb/class/scoreboard.sv
